@@ -1,6 +1,7 @@
 package gauravkumar.com.shoopie;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -62,7 +63,7 @@ public class SignUp extends AppCompatActivity {
                        }
                        catch (Exception e)
                        {
-                           Toast.makeText(getApplicationContext(),""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                           AlertAdapter.getObject(getApplicationContext()).createMessageAlert("Signup.java - "+e.getMessage());
                        }
                     }
                 }
@@ -72,8 +73,22 @@ public class SignUp extends AppCompatActivity {
 
     public void onResponseReceive(String response)
     {
-        Intent i = new Intent(SignUp.this,Login.class);
-        startActivity(i);
-        finish();
+        if(response.contains("error"))
+        {
+            try {
+                AlertAdapter.getObject(getApplicationContext()).createMessageAlert(response);
+            }
+            catch (Exception e)
+            {
+                AlertAdapter.getObject(getApplicationContext()).createMessageAlert("error in inputs");
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(),"Registered",Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(SignUp.this, Login.class);
+            startActivity(i);
+            finish();
+        }
     }
 }

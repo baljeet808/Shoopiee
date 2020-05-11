@@ -42,7 +42,7 @@ public class Splash extends AppCompatActivity {
 
                             if(SharedPreps.getStaticObject(getApplicationContext()).getLoginStatus())
                             {
-                                Intent i = new Intent(Splash.this,Login.class);
+                                Intent i = new Intent(Splash.this,HomePage.class);
                                 startActivity(i);
                                 finish();
                             }else

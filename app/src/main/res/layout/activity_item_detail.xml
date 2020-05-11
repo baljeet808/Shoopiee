@@ -80,15 +80,19 @@
                     android:textColor="@color/greydark"
                     android:id="@+id/color_textview"
                     />
-                <Spinner
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/black_hollow_rectangle"
-                    android:id="@+id/size_spinner"
+                    android:text="XL"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:textColor="@color/greydark"
+                    android:id="@+id/size_textview"
                     >
 
-                </Spinner>
+                </TextView>
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"

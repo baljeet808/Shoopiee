@@ -4,24 +4,22 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
+import adapters.AlertAdapter;
 import adapters.ImageLoader;
+import adapters.ItemArrayClass;
 
 public class ItemDetail extends AppCompatActivity {
 
 
     MainApplication mainApplication;
     ImageView itemImage,backButton;
-    TextView price,itemName,addToBagButton;
-    String selectedItemName = "";
-    Spinner sizeSpinner;
-    ArrayList<String> sizes;
+    TextView price,itemName,addToBagButton,colorr,sizes;
+    ItemArrayClass selectedItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +29,16 @@ public class ItemDetail extends AppCompatActivity {
         mainApplication = (MainApplication)this.getApplicationContext();
         mainApplication.setCurrentActivity(this);
 
-        selectedItemName = mainApplication.getChoosenItemName();
+        selectedItem = mainApplication.getChoosenItem();
 
         price = (TextView) findViewById(R.id.price_textview);
+        price.setText("NZD $"+selectedItem.price);
+        colorr = (TextView) findViewById(R.id.color_textview);
+        colorr.setText(selectedItem.colors.toUpperCase());
+        sizes = (TextView) findViewById(R.id.size_textview);
+        sizes.setText(selectedItem.sizes.toUpperCase());
         itemImage = (ImageView) findViewById(R.id.item_image_detail);
-        ImageLoader.getObject(getApplicationContext()).LoadImageFromUrl(itemImage,selectedItemName);
+        ImageLoader.getObject(getApplicationContext()).LoadImageFromUrl(itemImage,selectedItem.imageName+".png");
         backButton = (ImageView) findViewById(R.id.back_button_detail);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,29 +50,13 @@ public class ItemDetail extends AppCompatActivity {
         });
 
         itemName = (TextView) findViewById(R.id.item_name_detail);
-        itemName.setText(selectedItemName);
-        sizes = new ArrayList<>();
-        sizes.add("XS");
-        sizes.add("S");
-        sizes.add("M");
-        sizes.add("L");
-        sizes.add("XL");
-        sizeSpinner = (Spinner) findViewById(R.id.size_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ItemDetail.this,android.R.layout.simple_spinner_item,sizes);
-        sizeSpinner.setAdapter(adapter);
+        itemName.setText(selectedItem.itemName);
 
         addToBagButton = (TextView) findViewById(R.id.add_Button_textview);
         addToBagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Bundle b = new Bundle();
-                b.putString("itemName",selectedItemName);
-                b.putString("itemPrice",price.getText().toString());
-                b.putString("itemSize",sizeSpinner.getSelectedItem().toString());
-                b.putString("itemColor","Black");
-                mainApplication.saveItemattributes(b);
-
+                AlertAdapter.getObject(ItemDetail.this).createAlert();
                 Intent i = new Intent(ItemDetail.this,Cart.class);
                 startActivity(i);
                 finish();

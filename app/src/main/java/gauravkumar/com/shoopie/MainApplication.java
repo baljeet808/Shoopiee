@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import adapters.CustomBroadcastReciever;
+import adapters.ItemArrayClass;
 
 public class MainApplication  extends Application{
 
@@ -16,7 +17,7 @@ public class MainApplication  extends Application{
     private boolean firstTimeSplashFlag = true;
     private String gender = "Women";
     private String slectedItem = "Shirt";
-    private String choosenItemName="";
+    private ItemArrayClass choosenItem;
     private String volleyResponse = "";
     private Bundle itemAttributes = new Bundle();
 
@@ -73,13 +74,13 @@ public class MainApplication  extends Application{
         return volleyResponse;
     }
 
-    public void setChoosenItemName(String url)
+    public void setChoosenItem(ItemArrayClass item)
     {
-        choosenItemName = url;
+        choosenItem = item;
     }
-    public String getChoosenItemName()
+    public ItemArrayClass getChoosenItem()
     {
-        return choosenItemName;
+        return choosenItem;
     }
 
     public void saveItemattributes(Bundle  bundle)

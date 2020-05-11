@@ -17,9 +17,13 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
+import gauravkumar.com.shoopie.AddressBook;
+import gauravkumar.com.shoopie.Cart;
+import gauravkumar.com.shoopie.HomePage;
 import gauravkumar.com.shoopie.Login;
 import gauravkumar.com.shoopie.MainApplication;
 import gauravkumar.com.shoopie.SignUp;
+import gauravkumar.com.shoopie.UserDetail;
 
 public class WebApiAdapter {
 
@@ -29,6 +33,8 @@ public class WebApiAdapter {
     MainApplication mainApplication;
     SignUp signUp;
     Login login;
+    UserDetail userDetail;
+    AddressBook addressBook;
     int requestCode =0;
 
     static Context con;
@@ -62,19 +68,50 @@ public class WebApiAdapter {
                     map.put("password",bundle.getString("password"));
                     map.put("email",bundle.getString("email"));
                     url = "https://shoppie808.000webhostapp.com/shoppie/RegisterUser.php";
-                    try{
-
-                    }
-                    catch (Exception e)
-                    {
-                        Toast.makeText(con,"Signup object - "+e.getMessage(),Toast.LENGTH_LONG).show();
-                    }
             }
             break;
             case 2 :{
                 map.put("password",bundle.getString("password"));
                 map.put("email",bundle.getString("email"));
-                url = "https://shoppie808.000webhostapp.com/shoppie/signIn.php";
+                url = "https://shoppie808.000webhostapp.com/shoppie/SignIn.php";
+            }
+            break;
+            case 3 :
+            {
+                map.put("UID",bundle.getString("UID"));
+                map.put("fname",bundle.getString("fname"));
+                map.put("lname",bundle.getString("lname"));
+                map.put("password",bundle.getString("password"));
+                map.put("email",bundle.getString("email"));
+               // Toast.makeText(con, "email = "+bundle.getString("email"), Toast.LENGTH_SHORT).show();
+                url = "https://shoppie808.000webhostapp.com/shoppie/UpdateUserDetail.php";
+            }
+            break;
+            case 4 :
+            {
+
+                map.put("UID",bundle.getString("UID"));
+                map.put("address",bundle.getString("address"));
+                map.put("country",bundle.getString("country"));
+                //Toast.makeText(con, "email = "+bundle.getString("country"), Toast.LENGTH_SHORT).show();
+                url = "https://shoppie808.000webhostapp.com/shoppie/UpdateAddress.php";
+
+            }break;
+            case 5 :
+            {
+                url = "https://shoppie808.000webhostapp.com/shoppie/GetAllItems.php";
+            }
+            break;
+            case 6 :
+            {
+                map.put("UID",bundle.getString("UID"));
+                url = "https://shoppie808.000webhostapp.com/shoppie/GetSavedItemIds.php";
+            }break;
+            case 7 :
+            {
+                map.put("UID",bundle.getString("UID"));
+                map.put("itemID",bundle.getString("itemID"));
+                url = "https://shoppie808.000webhostapp.com/shoppie/saveItem.php";
             }
             break;
         }
@@ -94,7 +131,36 @@ public class WebApiAdapter {
          case 2 :
          {
              login = (Login)con;
-
+             login.onResponseReceive(response);
+         }
+         break;
+         case 3 :
+         {
+             userDetail = (UserDetail)con;
+             userDetail.onResponseReceive(response);
+         }
+         break;
+         case 4 :
+         {
+             addressBook = (AddressBook)con;
+             addressBook.onResponseReceive(response);
+         }
+         break;
+         case 5 :
+         {
+              HomePage homePage = (HomePage)con;
+             homePage.onResponseReceive(response);
+         }break;
+         case 6 :
+         {
+             Cart cart = (Cart)con;
+             cart.onResponseReceive(response);
+         }
+         break;
+         case 7 :
+         {
+             Cart cart = (Cart)con;
+             cart.onResponse(response);
          }
          break;
      }
@@ -109,7 +175,8 @@ public class WebApiAdapter {
                 if(response!=null)
                 {
                     mainApplication.setVolleyResponse(response);
-                    AlertAdapter.getObject(con).dismissAlert();
+                  if(requestCode!=5)
+                  {AlertAdapter.getObject(con).dismissAlert();}
                    // Toast.makeText(con,""+response,Toast.LENGTH_LONG).show();
                     sendBroadcastToSpecificClass(response);
                 }
@@ -118,7 +185,14 @@ public class WebApiAdapter {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlertAdapter.getObject(con).dismissAlert();
+               if(requestCode!=5){ AlertAdapter.getObject(con).dismissAlert();}
+                Log.e("\n\nerror: ",error.toString()+"\n\n\n");
+                try {
+                    AlertAdapter.getObject(con).createMessageAlert(error.getMessage().toUpperCase());
+                }catch (Exception e)
+                {
+                    AlertAdapter.getObject(con).createMessageAlert("Response error ");
+                }
                  }
         }
         )

@@ -89,8 +89,21 @@
                     android:layout_marginBottom="20dp"
                     android:textSize="20dp"
                     android:gravity="center"
+                    android:enabled="false"
+                    android:visibility="gone"
                     android:id="@+id/men_button_textview"
                     android:textAlignment="gravity"
+                    />
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner_hollow_button_black"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="15dp"
+                    android:visibility="visible"
+                    android:id="@+id/men_progrss_bar"
                     />
 
                 <TextView
@@ -109,9 +122,22 @@
                     android:text="WOMEN"
                     android:textSize="20dp"
                     android:gravity="center"
+                    android:enabled="false"
+                    android:visibility="gone"
                     android:id="@+id/women_button_textview"
                     android:textAlignment="gravity"
                     />
+                <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/round_corner_hollow_button_black"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="15dp"
+                android:visibility="visible"
+                android:id="@+id/women_progrss_bar"
+                />
 
                 <TextView
                     android:layout_width="0dp"

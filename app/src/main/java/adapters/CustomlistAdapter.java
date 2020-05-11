@@ -18,12 +18,12 @@ import java.util.List;
 
 import gauravkumar.com.shoopie.R;
 
-public class CustomlistAdapter extends ArrayAdapter<SavedItems> {
+public class CustomlistAdapter extends ArrayAdapter<ItemArrayClass> {
 
     private Context context;
-    private List<SavedItems> savedItemList = new ArrayList<>();
+    private List<ItemArrayClass> savedItemList = new ArrayList<>();
 
-    public CustomlistAdapter(Context context,ArrayList<SavedItems> list)
+    public CustomlistAdapter(Context context,ArrayList<ItemArrayClass> list)
     {
         super(context,0,list);
         this.context = context;
@@ -38,19 +38,19 @@ public class CustomlistAdapter extends ArrayAdapter<SavedItems> {
         if(listItem==null)
         {
             listItem = LayoutInflater.from(context).inflate(R.layout.custom_cart_list_item,parent,false);
-            SavedItems savedItem = savedItemList.get(position);
+            ItemArrayClass savedItem = savedItemList.get(position);
 
             ImageView imageView = (ImageView) listItem.findViewById(R.id.image_li);
-            ImageLoader.getObject(context).LoadImageFromUrl(imageView,savedItem.getItemName());
+            ImageLoader.getObject(context).LoadImageFromUrl(imageView,savedItem.imageName+".png");
 
             TextView itemName = (TextView) listItem.findViewById(R.id.item_name_li);
-            itemName.setText(savedItem.getItemName());
+            itemName.setText(savedItem.itemName);
 
             TextView itemPrice = (TextView) listItem.findViewById(R.id.item_price_li);
-            itemPrice.setText(savedItem.getPrice());
+            itemPrice.setText(savedItem.price);
 
             TextView itemColor = (TextView) listItem.findViewById(R.id.item_description_li);
-            itemColor.setText(savedItem.getColor());
+            itemColor.setText(savedItem.colors);
 
             ImageView deleteButton = (ImageView) listItem.findViewById(R.id.delete_li);
             deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -73,5 +73,15 @@ public class CustomlistAdapter extends ArrayAdapter<SavedItems> {
         return listItem;
     }
 
+    @Nullable
+    @Override
+    public ItemArrayClass getItem(int position) {
+        return savedItemList.get(position);
+    }
 
+
+    @Override
+    public int getCount() {
+        return savedItemList.size();
+    }
 }

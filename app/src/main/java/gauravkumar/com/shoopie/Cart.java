@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import adapters.AlertAdapter;
 import adapters.CustomlistAdapter;
-import adapters.SavedItems;
+import adapters.ItemArrayClass;
+import adapters.ItemsAdapter;
 import adapters.SharedPreps;
+import adapters.WebApiAdapter;
 
 public class Cart extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class Cart extends AppCompatActivity {
     ImageView backButton;
     ListView savedItemsList;
     CustomlistAdapter adapter;
+    ArrayList<ItemArrayClass> sItemList;
     int itemCount = 0;
 
     @Override
@@ -31,22 +35,12 @@ public class Cart extends AppCompatActivity {
         mainApplication = (MainApplication) this.getApplicationContext();
         mainApplication.setCurrentActivity(this);
 
-        ArrayList<SavedItems> itemList = new ArrayList<>();
+        AlertAdapter.getObject(Cart.this).createAlert();
+        Bundle bundle = new Bundle();
+        bundle.putString("UID",SharedPreps.getStaticObject(Cart.this).getUID());
+        bundle.putString("itemID",mainApplication.getChoosenItem().itemID);
+        WebApiAdapter.getObject(Cart.this).fireServerApi(7,bundle);
 
-        itemCount = SharedPreps.getStaticObject(getApplicationContext()).getSavedItemCount();
-        itemCount++;
-        SharedPreps.getStaticObject(getApplicationContext()).setSavedItemCount(itemCount);
-
-        Bundle b = mainApplication.getSaveAttributes();
-        SharedPreps.getStaticObject(getApplicationContext()).saveItem(itemCount,b.getString("itemName","abc"),b.getString("itemprice","$100"),b.getString("itemsize","S"),b.getString("itemColor","black"));
-
-        for(int i=1;i<=itemCount;i++)
-        {
-            Bundle bun = SharedPreps.getStaticObject(getApplicationContext()).getSavedItem(i);
-            itemList.add(new SavedItems(bun.getString("itemName","abc"),bun.getString("itemPrice","$100"),bun.getString("itemSize","S"),bun.getString("itemColor","black")));
-        }
-
-        adapter = new CustomlistAdapter(getApplicationContext(),itemList);
 
 
         buyButton = (TextView) findViewById(R.id.buy_Button_textview);
@@ -67,8 +61,36 @@ public class Cart extends AppCompatActivity {
                 finish();
             }
         });
-        savedItemsList = (ListView) findViewById(R.id.saved_items_list);
-        savedItemsList.setAdapter(adapter);
 
+
+        savedItemsList = (ListView) findViewById(R.id.saved_items_list);
+
+    }
+
+    public void onResponseReceive(String response) {
+        if(response.contains("error"))
+        {
+            AlertAdapter.getObject(Cart.this).createMessageAlert(response);
+        }
+        else {
+            ItemsAdapter.getObject(Cart.this).setSavedItems(response);
+            sItemList = ItemsAdapter.getObject(getApplicationContext()).getSavedItems();
+            adapter = new CustomlistAdapter(getApplicationContext(), sItemList);
+            savedItemsList.setAdapter(adapter);
+        }
+    }
+
+    public void onResponse(String response)
+    {
+        if(response.contains("error"))
+        {
+            AlertAdapter.getObject(Cart.this).createMessageAlert(response);
+        }
+        else {
+            AlertAdapter.getObject(Cart.this).createAlert();
+            Bundle bundle = new Bundle();
+            bundle.putString("UID", SharedPreps.getStaticObject(Cart.this).getUID());
+            WebApiAdapter.getObject(Cart.this).fireServerApi(6, bundle);
+        }
     }
 }

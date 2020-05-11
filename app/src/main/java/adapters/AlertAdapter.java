@@ -6,22 +6,25 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import java.util.logging.Handler;
+
 public class AlertAdapter {
 
     View view;
     RelativeLayout holder;
     AlertDialog.Builder builder;
     AlertDialog alert;
-    Context context;
+   static Context cont;
     static AlertAdapter alertAdapter;
 
     public AlertAdapter(Context context)
     {
-        this.context = context;
+        cont = context;
     }
 
     public static synchronized AlertAdapter getObject(Context context)
     {
+        cont = context;
         if(alertAdapter==null)
         {
             alertAdapter = new AlertAdapter(context);
@@ -29,16 +32,57 @@ public class AlertAdapter {
         return  alertAdapter;
     }
 
+    public void createMessageAlert(String message)
+    {
+
+        builder = new AlertDialog.Builder(cont);
+        alert = builder.create();
+        alert.setTitle(message);
+        alert.setCancelable(true);
+        alert.show();
+
+    }
+    public void createToastAlert(String message,long milliseconds)
+    {
+
+        builder = new AlertDialog.Builder(cont);
+        alert = builder.create();
+        alert.setTitle(message);
+        alert.setCancelable(false);
+        alert.show();
+
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alert.dismiss();
+            }
+        },milliseconds);
+
+    }
+
     public void createAlert()
     {
-        builder = new AlertDialog.Builder(context);
+        builder = new AlertDialog.Builder(cont);
         alert = builder.create();
         alert.setTitle("Please Wait..");
-        ProgressBar progressBar = new ProgressBar(context);
+        ProgressBar progressBar = new ProgressBar(cont);
         alert.setView(progressBar);
         alert.setCancelable(false);
         alert.show();
     }
+
+    public void createShadowAlert()
+    {
+        builder = new AlertDialog.Builder(cont);
+        alert = builder.create();
+        alert.setTitle("Please Wait..");
+        ProgressBar progressBar = new ProgressBar(cont);
+        alert.setView(progressBar);
+        alert.setCancelable(false);
+    }
+
+
+
 
     public void dismissAlert()
     {

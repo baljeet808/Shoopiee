@@ -139,4 +139,29 @@ public class SharedPreps {
         return b;
     }
 
+    public void setCountry(String country) {
+        editor.putString("country",country);
+        editor.apply();
+    }
+    public String getCountry()
+    {
+        return sharedPreferences.getString("country","vatican city");
+    }
+
+    public void setUID(String UID) {
+        editor.putString("UID",UID);
+        editor.apply();
+    }
+    public String getUID()
+    {
+        return sharedPreferences.getString("UID","1");
+    }
+
+    public String getUserInitials()
+    {
+        String initials = "";
+
+        initials = sharedPreferences.getString("fname","G").charAt(0)+" "+sharedPreferences.getString("lname","K").charAt(0);
+        return initials;
+    }
 }
