@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import adapters.AlertAdapter;
 import adapters.ImageLoader;
 import adapters.ItemArrayClass;
+import adapters.SharedPreps;
+import adapters.WebApiAdapter;
 
 public class ItemDetail extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class ItemDetail extends AppCompatActivity {
     ImageView itemImage,backButton;
     TextView price,itemName,addToBagButton,colorr,sizes;
     ItemArrayClass selectedItem;
+    ProgressBar addCartLoadingBar;
 
 
     @Override
@@ -37,6 +41,7 @@ public class ItemDetail extends AppCompatActivity {
         colorr.setText(selectedItem.colors.toUpperCase());
         sizes = (TextView) findViewById(R.id.size_textview);
         sizes.setText(selectedItem.sizes.toUpperCase());
+        addCartLoadingBar = (ProgressBar) findViewById(R.id.addToCart_loading_view);
         itemImage = (ImageView) findViewById(R.id.item_image_detail);
         ImageLoader.getObject(getApplicationContext()).LoadImageFromUrl(itemImage,selectedItem.imageName+".png");
         backButton = (ImageView) findViewById(R.id.back_button_detail);
@@ -56,13 +61,36 @@ public class ItemDetail extends AppCompatActivity {
         addToBagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertAdapter.getObject(ItemDetail.this).createAlert();
-                Intent i = new Intent(ItemDetail.this,Cart.class);
-                startActivity(i);
-                finish();
+
+                addToBagButton.setVisibility(View.GONE);
+                addCartLoadingBar.setVisibility(View.VISIBLE);
+                backButton.setEnabled(false);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("itemID",mainApplication.getChoosenItem().itemID);
+                bundle.putString("UID", SharedPreps.getStaticObject(ItemDetail.this).getUID());
+                WebApiAdapter.getObject(ItemDetail.this).fireServerApi(7,bundle);
+
+
             }
         });
 
 
+    }
+
+    public void onResponseReceive(String response) {
+        if(response.contains("error"))
+        {
+            AlertAdapter.getObject(ItemDetail.this).createMessageAlert(response);
+            backButton.setEnabled(true);
+            addCartLoadingBar.setVisibility(View.GONE);
+            addToBagButton.setVisibility(View.VISIBLE);
+        }
+        else {
+
+            Intent i = new Intent(ItemDetail.this,Cart.class);
+            startActivity(i);
+            finish();
+        }
     }
 }

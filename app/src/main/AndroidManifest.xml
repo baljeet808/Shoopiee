@@ -31,7 +31,9 @@
         <activity android:name=".Checkout" />
         <activity android:name=".Profile" />
         <activity android:name=".UserDetail" />
-        <activity android:name=".AddressBook"></activity>
+        <activity android:name=".AddressBook" />
+        <activity android:name=".SavedItem" />
+        <activity android:name=".Orders"></activity>
     </application>
 
 </manifest>

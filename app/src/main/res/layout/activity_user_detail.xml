@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="FIRST NAME"
-            android:textColorHint="@color/greydark"
+            android:textColorHint="@color/white"
             android:text="First Name"
             android:textColor="@color/white"
             />
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="LAST NAME"
-            android:textColorHint="@color/greydark"
+            android:textColorHint="@color/white"
             android:text="Last Name"
             android:textColor="@color/white"
             />
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="EMAIL"
-            android:textColorHint="@color/greydark"
+            android:textColorHint="@color/white"
             android:text="Daurav@gmail.com"
             android:textColor="@color/white"
             />
@@ -92,7 +92,7 @@
             android:hint="PASSWORD"
             android:text="Password"
             android:inputType="textPassword"
-            android:textColorHint="@color/greydark"
+            android:textColorHint="@color/white"
             android:textColor="@color/white"
             />
     </android.support.design.widget.TextInputLayout>

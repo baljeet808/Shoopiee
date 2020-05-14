@@ -19,9 +19,12 @@ import java.util.Map;
 
 import gauravkumar.com.shoopie.AddressBook;
 import gauravkumar.com.shoopie.Cart;
+import gauravkumar.com.shoopie.Checkout;
 import gauravkumar.com.shoopie.HomePage;
+import gauravkumar.com.shoopie.ItemDetail;
 import gauravkumar.com.shoopie.Login;
 import gauravkumar.com.shoopie.MainApplication;
+import gauravkumar.com.shoopie.SavedItem;
 import gauravkumar.com.shoopie.SignUp;
 import gauravkumar.com.shoopie.UserDetail;
 
@@ -36,9 +39,11 @@ public class WebApiAdapter {
     UserDetail userDetail;
     AddressBook addressBook;
     int requestCode =0;
+    boolean ifFirst = true;
 
     static Context con;
     static WebApiAdapter apiAdapter;
+    String sid;
 
     public WebApiAdapter (Context con)
     {
@@ -104,7 +109,7 @@ public class WebApiAdapter {
             break;
             case 6 :
             {
-                map.put("UID",bundle.getString("UID"));
+                map.put("UID",SharedPreps.getStaticObject(con).getUID());
                 url = "https://shoppie808.000webhostapp.com/shoppie/GetSavedItemIds.php";
             }break;
             case 7 :
@@ -114,6 +119,31 @@ public class WebApiAdapter {
                 url = "https://shoppie808.000webhostapp.com/shoppie/saveItem.php";
             }
             break;
+            case 8 :
+            {
+                map.put("sid",bundle.getString("sid"));
+                sid = bundle.getString("sid");
+                url = "https://shoppie808.000webhostapp.com/shoppie/deletSavedItem.php";
+            }break;
+            case 9 :
+            {
+                map.put("UID",bundle.getString("UID"));
+                map.put("orderNumber",bundle.getString("orderNumber"));
+                url="https://shoppie808.000webhostapp.com/shoppie/placeOrder.php";
+            }break;
+            case 10 :
+            {
+                map.put("sid",bundle.getString("sid"));
+                sid = bundle.getString("sid");
+                map.put("orderNumber",bundle.getString("orderNumber"));
+                url = "https://shoppie808.000webhostapp.com/shoppie/orderSavedItem.php";
+            }
+            break;
+            case 11 :
+            {
+                map.put("UID",SharedPreps.getStaticObject(con).getUID());
+                url = "https://shoppie808.000webhostapp.com/shoppie/GetSavedItemIds.php";
+            }break;
         }
         performWebOperation();
 
@@ -159,10 +189,36 @@ public class WebApiAdapter {
          break;
          case 7 :
          {
-             Cart cart = (Cart)con;
-             cart.onResponse(response);
+             ItemDetail itemDetail = (ItemDetail)con;
+             itemDetail.onResponseReceive(response);
          }
          break;
+         case 8 :
+         {
+             if(mainApplication.getCurrentActivity().getLocalClassName().equals("Cart")==true) {
+                 Cart cart = (Cart) con;
+                 cart.refreshCart(response, sid);
+             }
+             else{
+                 ItemsAdapter.getObject(con).deleteSavedItem(sid);
+             }
+         }
+         break;
+         case 9 :
+         {
+             Checkout checkout= (Checkout)con;
+             checkout.OnResponseByOrderTable(response);
+         }break;
+         case 10 :
+         {
+            ItemsAdapter.getObject(con).deleteSavedItem(sid);
+         }
+         break;
+         case 11 :
+         {
+             SavedItem item = (SavedItem)con;
+             item.onResponse(response);
+         }break;
      }
     }
 
@@ -175,9 +231,9 @@ public class WebApiAdapter {
                 if(response!=null)
                 {
                     mainApplication.setVolleyResponse(response);
-                  if(requestCode!=5)
+                /*  if(requestCode!=5 || requestCode!=6 || requestCode!=7)
                   {AlertAdapter.getObject(con).dismissAlert();}
-                   // Toast.makeText(con,""+response,Toast.LENGTH_LONG).show();
+                */   // Toast.makeText(con,""+response,Toast.LENGTH_LONG).show();
                     sendBroadcastToSpecificClass(response);
                 }
 
@@ -185,15 +241,21 @@ public class WebApiAdapter {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               if(requestCode!=5){ AlertAdapter.getObject(con).dismissAlert();}
-                Log.e("\n\nerror: ",error.toString()+"\n\n\n");
+              /* if(requestCode!=5 || requestCode!=6 || requestCode!=7){ AlertAdapter.getObject(con).dismissAlert();}
+              */  Log.e("\n\nerror: ",error.toString()+"\n\n\n");
                 try {
                     AlertAdapter.getObject(con).createMessageAlert(error.getMessage().toUpperCase());
                 }catch (Exception e)
                 {
                     AlertAdapter.getObject(con).createMessageAlert("Response error ");
                 }
+                if(requestCode == 7 || requestCode == 6)
+                {
+                    sendBroadcastToSpecificClass("network error");
+                }
+
                  }
+
         }
         )
         {

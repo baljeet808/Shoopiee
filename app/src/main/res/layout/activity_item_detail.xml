@@ -118,9 +118,26 @@
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:gravity="center"
+                android:visibility="visible"
                 android:textStyle="bold"
                 android:layout_marginBottom="40dp"
                 android:id="@+id/add_Button_textview"
+                />
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/green"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:progressTint="@color/white"
+                android:layout_marginBottom="40dp"
+                android:id="@+id/addToCart_loading_view"
                 />
         </LinearLayout>
     </LinearLayout>

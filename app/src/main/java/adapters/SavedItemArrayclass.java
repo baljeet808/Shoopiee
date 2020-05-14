@@ -1,5 +1,5 @@
 package adapters;
 
 public class SavedItemArrayclass {
-    String sid,itemID;
+    public String sid,itemID,itemName,colors,sizes,price,gender,category,imageName;
 }

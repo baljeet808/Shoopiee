@@ -51,6 +51,12 @@ public class Profile extends AppCompatActivity {
             }
         });
         orderButton = (LinearLayout) findViewById(R.id.my_order_button_layout);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         addressButton = (LinearLayout) findViewById(R.id.address_book_button_layout);
         addressButton.setOnClickListener(new View.OnClickListener() {
             @Override

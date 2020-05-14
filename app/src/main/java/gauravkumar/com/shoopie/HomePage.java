@@ -70,6 +70,14 @@ public class HomePage extends AppCompatActivity {
         });
         supportMenuButton = (LinearLayout) view.findViewById(R.id.support_menu_button);
         savedMenuButton = (LinearLayout) view.findViewById(R.id.saved_menu_button);
+        savedMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomePage.this,SavedItem.class);
+                startActivity(i);
+                finish();
+            }
+        });
         logOutMenuButton = (LinearLayout) view.findViewById(R.id.signout_menu_button);
         logOutMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override

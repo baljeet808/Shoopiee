@@ -13,9 +13,10 @@ public class ItemsAdapter {
     static Context con;
     static ItemsAdapter itemsAdapter;
     ItemArrayClass items;
-    SavedItemArrayclass savedItem;
     ArrayList<ItemArrayClass> list;
     boolean itemsHere = false;
+
+    SavedItemArrayclass savedItem;
     ArrayList<SavedItemArrayclass> savedList;
 
     public ItemsAdapter(Context context)
@@ -80,39 +81,60 @@ public class ItemsAdapter {
         return arrayList;
     }
 
-    public void setSavedItems(String response)
+    public void saveCartItems(String response)
     {
+        savedList.clear();
         try {
-            savedList.clear();
             JSONArray jsonArray = new JSONArray(response);
             for(int i =0;i<jsonArray.length();i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 savedItem = new SavedItemArrayclass();
                 savedItem.itemID = jsonObject.getString("iid");
+                savedItem.itemName = jsonObject.getString("itemName");
+                savedItem.colors = jsonObject.getString("color");
+                savedItem.sizes = jsonObject.getString("size");
+                savedItem.price = jsonObject.getString("price");
+                savedItem.gender = jsonObject.getString("gender");
+                savedItem.category = jsonObject.getString("category");
+                savedItem.imageName = jsonObject.getString("image");
                 savedItem.sid = jsonObject.getString("sid");
                 savedList.add(savedItem);
             }
         }
         catch (Exception e)
         {
-               AlertAdapter.getObject(con).createMessageAlert(e.getMessage());
+            AlertAdapter.getObject(con).createMessageAlert(e.getMessage());
         }
     }
 
-    public ArrayList<ItemArrayClass> getSavedItems()
+    public boolean deleteSavedItem(String sid)
     {
-        ArrayList<ItemArrayClass> arrayList = new ArrayList<>();
-
-        for(int k =0;k<savedList.size();k++) {
-            for (int i = 0; i < 32; i++) {
-                if (list.get(i).itemID.equalsIgnoreCase(savedList.get(k).itemID)){
-                    arrayList.add(list.get(i));
-                }
+        boolean flag = false;
+        for(int i = 0;i<savedList.size();i++)
+        {
+            if(savedList.get(i).sid==sid)
+            {
+                savedList.remove(i);
+                flag = true;
             }
         }
-        return arrayList;
+        return flag;
     }
 
+    public String getCartTotalPrice()
+    {
+        int totalPrice = 0;
+        for (int i = 0;i<savedList.size();i++)
+        {
+            totalPrice = totalPrice + Integer.parseInt(savedList.get(i).price);
+        }
+        return String.valueOf(totalPrice);
+    }
+
+    public ArrayList<SavedItemArrayclass> getSavedItemsList()
+    {
+        return savedList;
+    }
 }
 
 
