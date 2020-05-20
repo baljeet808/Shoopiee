@@ -136,6 +136,7 @@ public class WebApiAdapter {
                 map.put("sid",bundle.getString("sid"));
                 sid = bundle.getString("sid");
                 map.put("orderNumber",bundle.getString("orderNumber"));
+                map.put("iid",bundle.getString("iid"));
                 url = "https://shoppie808.000webhostapp.com/shoppie/orderSavedItem.php";
             }
             break;
@@ -211,6 +212,7 @@ public class WebApiAdapter {
          }break;
          case 10 :
          {
+            // Toast.makeText(con, "saved item "+sid+" deleting", Toast.LENGTH_SHORT).show();
             ItemsAdapter.getObject(con).deleteSavedItem(sid);
          }
          break;
@@ -231,9 +233,6 @@ public class WebApiAdapter {
                 if(response!=null)
                 {
                     mainApplication.setVolleyResponse(response);
-                /*  if(requestCode!=5 || requestCode!=6 || requestCode!=7)
-                  {AlertAdapter.getObject(con).dismissAlert();}
-                */   // Toast.makeText(con,""+response,Toast.LENGTH_LONG).show();
                     sendBroadcastToSpecificClass(response);
                 }
 
@@ -245,13 +244,11 @@ public class WebApiAdapter {
               */  Log.e("\n\nerror: ",error.toString()+"\n\n\n");
                 try {
                     AlertAdapter.getObject(con).createMessageAlert(error.getMessage().toUpperCase());
+                    sendBroadcastToSpecificClass("error");
                 }catch (Exception e)
                 {
                     AlertAdapter.getObject(con).createMessageAlert("Response error ");
-                }
-                if(requestCode == 7 || requestCode == 6)
-                {
-                    sendBroadcastToSpecificClass("network error");
+                    sendBroadcastToSpecificClass("error");
                 }
 
                  }

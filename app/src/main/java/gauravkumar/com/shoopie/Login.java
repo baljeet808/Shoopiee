@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
                         }
                         catch (Exception e)
                         {
-                          AlertAdapter.getObject(getApplicationContext()).createMessageAlert(e.getMessage());
+                          AlertAdapter.getObject(Login.this).createMessageAlert(e.getMessage());
                                }
                     }
                 }
@@ -80,7 +80,8 @@ public class Login extends AppCompatActivity {
     {
         if(response.equals("fail"))
         {
-            AlertAdapter.getObject(getApplicationContext()).createMessageAlert("Please Check your email or password !!");
+            AlertAdapter.getObject(Login.this).dismissAlert();
+            AlertAdapter.getObject(Login.this).createMessageAlert("Please Check your email or password !!");
         }else{
 
             try {
@@ -88,14 +89,14 @@ public class Login extends AppCompatActivity {
 
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-                SharedPreps.getStaticObject(getApplicationContext()).setUID(jsonObject.getString("UID"));
-                SharedPreps.getStaticObject(getApplicationContext()).setUserFName(jsonObject.getString("firstname"));
-                SharedPreps.getStaticObject(getApplicationContext()).setUserLName(jsonObject.getString("lastname"));
-                SharedPreps.getStaticObject(getApplicationContext()).setUserEmail(jsonObject.getString("email"));
-                SharedPreps.getStaticObject(getApplicationContext()).setPassword(jsonObject.getString("password"));
-                SharedPreps.getStaticObject(getApplicationContext()).setAddress(jsonObject.getString("address"));
-                SharedPreps.getStaticObject(getApplicationContext()).setCountry(jsonObject.getString("country"));
-                SharedPreps.getStaticObject(getApplicationContext()).setLoginStatus(true);
+                SharedPreps.getStaticObject(Login.this).setUID(jsonObject.getString("UID"));
+                SharedPreps.getStaticObject(Login.this).setUserFName(jsonObject.getString("firstname"));
+                SharedPreps.getStaticObject(Login.this).setUserLName(jsonObject.getString("lastname"));
+                SharedPreps.getStaticObject(Login.this).setUserEmail(jsonObject.getString("email"));
+                SharedPreps.getStaticObject(Login.this).setPassword(jsonObject.getString("password"));
+                SharedPreps.getStaticObject(Login.this).setAddress(jsonObject.getString("address"));
+                SharedPreps.getStaticObject(Login.this).setCountry(jsonObject.getString("country"));
+                SharedPreps.getStaticObject(Login.this).setLoginStatus(true);
 
 
                  Toast.makeText(getApplicationContext(),"Ready to shop "+SharedPreps.getStaticObject(getApplicationContext()).getUserFName().toUpperCase()+" !!",Toast.LENGTH_SHORT).show();
@@ -107,7 +108,7 @@ public class Login extends AppCompatActivity {
             }
             catch (Exception e)
             {
-                AlertAdapter.getObject(getApplicationContext()).createMessageAlert(e.getMessage());
+                AlertAdapter.getObject(Login.this).createMessageAlert(e.getMessage());
             }
 
         }

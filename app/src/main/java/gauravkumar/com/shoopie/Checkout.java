@@ -130,10 +130,10 @@ public class Checkout extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString("orderNumber",orderNum);
             ArrayList<SavedItemArrayclass> savedItems = ItemsAdapter.getObject(Checkout.this).getSavedItemsList();
-            for(int i = 0;i<savedItems.size();i++)
-            {
-                bundle.putString("sid",savedItems.get(i).sid);
-                WebApiAdapter.getObject(Checkout.this).fireServerApi(10,bundle);
+            for(int i = 0;i<savedItems.size();i++) {
+                bundle.putString("sid", savedItems.get(i).sid);
+                bundle.putString("iid", savedItems.get(i).itemID);
+                WebApiAdapter.getObject(Checkout.this).fireServerApi(10, bundle);
             }
               }
     }
